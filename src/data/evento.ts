@@ -25,6 +25,7 @@ export const evento = {
         { titulo: "PADRINOS DE AROS", nombre: "Mario Orellana y Sra." },
         { titulo: "MADRINA DE FOTO Y VIDEO", nombre: "Natay Claros Ramos" },
         { titulo: "PADRINOS DE DECORACIÓN", nombre: "Anil Nair y Sra." },
+        { titulo: "MADRINA DE SORPRESA", nombre: "Bernita Orellana" },
     ],
 
     direccionSalon: "CALLE JUNÍN, A UNA CUADRA Y MEDIA DE LA PLAZA 24 DE SEPTIEMBRE ESQ. AV. CIRCUNVALACIÓN · MAIRANA",
