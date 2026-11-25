@@ -8,6 +8,11 @@
 import { evento as e } from "../data/evento";
 
 // Diciembre 2026 empieza en martes (columna 1 con la semana desde el lunes)
+// Padrinos: cada grupo ocupa 260 px; la sección se alarga sola
+const PASO_PADRINO = 260;
+const ALTO_PADRINOS = 660 + (e.padrinos.length - 1) * PASO_PADRINO;
+const pct = (y: number) => ((y / ALTO_PADRINOS) * 100).toFixed(2);
+
 const PRIMER_DIA = 1;
 const DIA_BODA = 5;
 const celdas = Array.from({ length: 31 }, (_, i) => {
@@ -63,16 +68,19 @@ const FILA_Y = [45.3, 49.6, 53.6, 57.8, 61.8]; // % del alto (imagen de 1688)
         <p class="txt script" style="top:81.2%; font-size:7.8cqw; color:#2a2324">{e.padresNovio[1]}</p>
     </section>
 
-    <!-- ═══ PADRINOS (mismo diseño que los padres) ═══ -->
-    <section class="lamina" style="aspect-ratio:1000/1180; background-image:url('/imagenes/verde/padres.webp'); background-size:100% auto; background-position:center bottom">
-        <h2 class="txt script" style="top:7.5%; font-size:12cqw; font-weight:400">Nuestros Padrinos</h2>
-        <img class="orn" src="/imagenes/verde/laurel.png" alt="" style="top:17.4%; width:25cqw" />
+    <!-- ═══ PADRINOS (mismo diseño que los padres) ═══
+         La altura crece con la cantidad de padrinos: el fondo va en tres
+         partes (hojas arriba, papel que se repite, rama abajo) para no
+         estirar las hojas. Medidas en px de una imagen de 1000 de ancho. -->
+    <section class="lamina padrinos" style={`aspect-ratio:1000/${ALTO_PADRINOS}`}>
+        <h2 class="txt script" style={`top:${pct(88)}%; font-size:12cqw; font-weight:400`}>Nuestros Padrinos</h2>
+        <img class="orn" src="/imagenes/verde/laurel.png" alt="" style={`top:${pct(205)}%; width:25cqw`} />
         {
             e.padrinos.map((p, i) => (
                 <>
-                    <p class="txt serif" style={`top:${26.7 + i * 22}%; font-size:4.8cqw; color:#9b1c31`}>{p.titulo}</p>
-                    <img class="orn" src="/imagenes/verde/linea-corazon.png" alt="" style={`top:${29.8 + i * 22}%; width:44cqw`} />
-                    <p class="txt script" style={`top:${36.2 + i * 22}%; font-size:7.8cqw; color:#2a2324`}>{p.nombre}</p>
+                    <p class="txt serif" style={`top:${pct(315 + i * PASO_PADRINO)}%; font-size:4.8cqw; color:#9b1c31`}>{p.titulo}</p>
+                    <img class="orn" src="/imagenes/verde/linea-corazon.png" alt="" style={`top:${pct(352 + i * PASO_PADRINO)}%; width:44cqw`} />
+                    <p class="txt script" style={`top:${pct(427 + i * PASO_PADRINO)}%; font-size:7.8cqw; color:#2a2324`}>{p.nombre}</p>
                 </>
             ))
         }
@@ -222,6 +230,13 @@ const FILA_Y = [45.3, 49.6, 53.6, 57.8, 61.8]; // % del alto (imagen de 1688)
     }
     .caja {
         white-space: normal;
+    }
+    /* Fondo de padrinos en tres partes */
+    .padrinos {
+        background-image: url("/imagenes/verde/padrinos-arriba.webp"), url("/imagenes/verde/padrinos-abajo.webp"), url("/imagenes/verde/padrinos-medio.webp");
+        background-size: 100% auto, 100% auto, 100% auto;
+        background-position: center top, center bottom, center top;
+        background-repeat: no-repeat, no-repeat, repeat-y;
     }
     /* Adornos sueltos (laurel, línea con corazón) */
     .orn {
