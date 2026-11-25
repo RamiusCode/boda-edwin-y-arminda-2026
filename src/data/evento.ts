@@ -23,7 +23,7 @@ export const evento = {
         { titulo: "PADRINOS DE RELIGIÓN", nombre: "Javier Quiroz y Sra." },
         { titulo: "PADRINOS DE CIVIL", nombre: "Víctor Claros y Sra." },
         { titulo: "PADRINOS DE AROS", nombre: "Mario Orellana y Sra." },
-        { titulo: "PADRINO DE FOTO Y VIDEO", nombre: "Natay Claros Ramos" },
+        { titulo: "MADRINA DE FOTO Y VIDEO", nombre: "Natay Claros Ramos" },
         { titulo: "PADRINOS DE DECORACIÓN", nombre: "Anil Nair y Sra." },
     ],
 
