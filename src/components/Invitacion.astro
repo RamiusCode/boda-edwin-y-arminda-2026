@@ -1,0 +1,700 @@
+---
+// src/components/Invitacion.astro
+// Invitación verde (papel, hojas en acuarela y letras oliva). Cada sección es
+// una imagen de fondo sin texto y el texto va escrito encima, en posiciones
+// medidas sobre la imagen original de 1000 px de ancho: por eso las medidas
+// van en % del alto y las letras en cqw (1cqw = 10 px de la imagen).
+// Todos los datos salen de src/data/evento.ts.
+import { evento as e } from "../data/evento";
+
+// Diciembre 2026 empieza en martes (columna 1 con la semana desde el lunes)
+const PRIMER_DIA = 1;
+const DIA_BODA = 5;
+const celdas = Array.from({ length: 31 }, (_, i) => {
+    const n = i + 1;
+    const pos = PRIMER_DIA + i;
+    return { n, col: pos % 7, fila: Math.floor(pos / 7) };
+});
+const COL_X = [18, 29, 39.5, 50, 60.5, 71.2, 81.8]; // % del ancho
+const FILA_Y = [45.3, 49.6, 53.6, 57.8, 61.8]; // % del alto (imagen de 1688)
+---
+
+<div class="inv">
+    <!-- ═══ PORTADA ═══ -->
+    <section class="lamina" style="color:#9b1c31; aspect-ratio:1000/2381; background-image:url('/imagenes/verde/portada.webp'); background-size:124% 100%; background-position:center">
+        <div class="mono" style="top:12.2%; font-size:22cqw">
+            <span>{e.iniciales[0]}</span><span class="mono-2">{e.iniciales[1]}</span>
+        </div>
+        <h1 class="sr-only">{e.nombre1} & {e.nombre2}</h1>
+        <p class="txt script" style="top:39.2%; font-size:21cqw" aria-hidden="true">{e.nombre1}</p>
+        <p class="txt script" style="top:49.4%; font-size:9cqw" aria-hidden="true">&amp;</p>
+        <p class="txt script" style="top:57.8%; font-size:21cqw" aria-hidden="true">{e.nombre2}</p>
+        <p class="txt serif" style="top:21.1%; font-size:5.6cqw; letter-spacing:.06em; color:#2a2324">NUESTRA BODA</p>
+        <img class="orn" src="/imagenes/verde/linea-corazon.png" alt="" style="top:23.6%; width:46cqw" />
+        <p class="txt serif" style="top:78.4%; font-size:6.4cqw; letter-spacing:.05em; font-weight:600; color:#2a2324">{e.fechaCorta}</p>
+        <span class="flechas" style="color:#b8964f" aria-hidden="true"><i></i><i></i><i></i></span>
+    </section>
+
+    <!-- ═══ VERSÍCULO + CANCIÓN ═══ -->
+    <section class="verde">
+        <p class="verso">{e.versiculo.texto}</p>
+        <p class="verso cita">{e.versiculo.cita}</p>
+        <p class="play-txt">DALE PLAY PARA ESCUCHAR NUESTRA CANCIÓN.</p>
+        <audio class="reproductor" controls preload="metadata" src="/musica/melodia2.mp3"></audio>
+    </section>
+
+    <!-- Foto de los novios a todo el ancho, fundida con el papel arriba y abajo -->
+    <section class="foto">
+        <img src="/imagenes/verde/foto-1.webp" alt="Edwin y Arminda" loading="lazy" width="860" height="1147" />
+    </section>
+
+    <!-- ═══ BENDICIÓN Y PADRES ═══ -->
+    <!-- Fondo de 1000x1300: hojas arriba a la derecha y rama abajo a la izquierda -->
+    <section class="lamina" style="aspect-ratio:1000/1300; background-image:url('/imagenes/verde/padres.webp')">
+        <p class="txt serif caja" style="top:17%; font-size:4.2cqw; width:66%; line-height:1.12">{e.bendicion}</p>
+        <img class="orn" src="/imagenes/verde/laurel.png" alt="" style="top:29.5%; width:25cqw" />
+        <p class="txt serif" style="top:38.3%; font-size:4.8cqw; color:#9b1c31">PADRES DE LA NOVIA</p>
+        <img class="orn" src="/imagenes/verde/linea-corazon.png" alt="" style="top:41.1%; width:44cqw" />
+        <p class="txt script" style="top:47.5%; font-size:7.8cqw; color:#2a2324">{e.padresNovia[0]}</p>
+        <p class="txt script" style="top:53.9%; font-size:7.8cqw; color:#2a2324">{e.padresNovia[1]}</p>
+        <p class="txt serif" style="top:65.6%; font-size:4.8cqw; color:#9b1c31">PADRES DEL NOVIO</p>
+        <img class="orn" src="/imagenes/verde/linea-corazon.png" alt="" style="top:68.4%; width:44cqw" />
+        <p class="txt script" style="top:74.8%; font-size:7.8cqw; color:#2a2324">{e.padresNovio[0]}</p>
+        <p class="txt script" style="top:81.2%; font-size:7.8cqw; color:#2a2324">{e.padresNovio[1]}</p>
+    </section>
+
+    <!-- ═══ PADRINOS (mismo diseño que los padres) ═══ -->
+    <section class="lamina" style="aspect-ratio:1000/1180; background-image:url('/imagenes/verde/padres.webp'); background-size:100% auto; background-position:center bottom">
+        <h2 class="txt script" style="top:7.5%; font-size:12cqw; font-weight:400">Nuestros Padrinos</h2>
+        <img class="orn" src="/imagenes/verde/laurel.png" alt="" style="top:17.4%; width:25cqw" />
+        {
+            e.padrinos.map((p, i) => (
+                <>
+                    <p class="txt serif" style={`top:${26.7 + i * 22}%; font-size:4.8cqw; color:#9b1c31`}>{p.titulo}</p>
+                    <img class="orn" src="/imagenes/verde/linea-corazon.png" alt="" style={`top:${29.8 + i * 22}%; width:44cqw`} />
+                    <p class="txt script" style={`top:${36.2 + i * 22}%; font-size:7.8cqw; color:#2a2324`}>{p.nombre}</p>
+                </>
+            ))
+        }
+    </section>
+
+    <!-- ═══ GUARDA LA FECHA + CONTADOR ═══ -->
+    <section class="lamina" style="aspect-ratio:1000/1688; background-image:url('/imagenes/verde/fecha.webp')">
+        <p class="txt serif" style="top:27.6%; font-size:6.4cqw; font-weight:500">{e.fechaCorta}</p>
+        {
+            celdas.map((c) =>
+                c.n === DIA_BODA ? (
+                    <span class="corazon" style={`left:${COL_X[c.col]}%; top:${FILA_Y[c.fila]}%`}>
+                        <svg viewBox="0 0 100 92" aria-hidden="true"><path d="M50 90 C20 66 2 50 2 27 C2 12 14 2 28 2 C38 2 46 8 50 16 C54 8 62 2 72 2 C86 2 98 12 98 27 C98 50 80 66 50 90Z" fill="#9b1c31"></path></svg>
+                        <b>{c.n}</b>
+                    </span>
+                ) : (
+                    <span class="txt serif dia" style={`left:${COL_X[c.col]}%; top:${FILA_Y[c.fila]}%`}>{c.n}</span>
+                ),
+            )
+        }
+        <div class="contador" id="contador" data-inicio={e.inicio} style="top:84%">
+            <div><b data-u="d">0</b><small>DÍAS</small></div>
+            <div><b data-u="h">0</b><small>HORAS</small></div>
+            <div><b data-u="m">0</b><small>MIN</small></div>
+            <div><b data-u="s">0</b><small>SEG</small></div>
+        </div>
+    </section>
+
+    <!-- Título del día, fuera de la tarjeta: son dos días y no hay que confundirlos -->
+    <section class="dia-titulo">
+        <p class="script dia-num">Primer día</p>
+        <p class="serif dia-fecha">SÁBADO 5 DE DICIEMBRE</p>
+        <img class="dia-orn" src="/imagenes/verde/linea-corazon.png" alt="" />
+    </section>
+
+    <!-- ═══ CEREMONIA RELIGIOSA (sábado) ═══ -->
+    <section class="lamina" style="aspect-ratio:1000/1504; background-image:url('/imagenes/verde/ceremonia.webp')">
+        <p class="txt script" style="top:18.3%; font-size:13cqw">Ceremonia</p>
+        <p class="txt serif" style="top:24.2%; font-size:5.6cqw; letter-spacing:.03em; color:#9b1c31">RELIGIOSA</p>
+        <div class="info" style="top:47.9%">
+            <p class="info-dia">SÁBADO 5 DE DICIEMBRE</p>
+            <p class="info-hora">14:30 HRS.</p>
+            <p class="info-lugar">LUGAR: IGLESIA VIRGEN<br />DEL CARMEN</p>
+            <a class="llegar" href={e.mapaIglesia} target="_blank" rel="noopener" aria-label="Cómo llegar a la Iglesia Virgen del Carmen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z" fill="currentColor"/></svg>¿CÓMO LLEGAR?</a>
+        </div>
+    </section>
+
+    <!-- ═══ RECEPCIÓN SOCIAL (sábado) ═══ -->
+    <section class="lamina" style="aspect-ratio:1000/1645; background-image:url('/imagenes/verde/recepcion.webp')">
+        <p class="txt script" style="top:21.6%; font-size:13cqw">Recepción</p>
+        <p class="txt serif" style="top:28.4%; font-size:5.6cqw; letter-spacing:.03em; color:#9b1c31">SOCIAL</p>
+        <div class="info" style="top:50.5%">
+            <p class="info-dia">SÁBADO 5 DE DICIEMBRE</p>
+            <p class="info-hora">18:00 HRS.</p>
+            <p class="info-lugar">LUGAR: SALÓN NAVIA</p>
+            <p class="info-dir">{e.direccionSalon}</p>
+            <a class="llegar" href={e.mapaSalon} target="_blank" rel="noopener" aria-label="Cómo llegar al Salón Navia"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z" fill="currentColor"/></svg>¿CÓMO LLEGAR?</a>
+        </div>
+    </section>
+
+    <!-- Título del día, fuera de la tarjeta: son dos días y no hay que confundirlos -->
+    <section class="dia-titulo">
+        <p class="script dia-num">Segundo día</p>
+        <p class="serif dia-fecha">DOMINGO 6 DE DICIEMBRE</p>
+        <img class="dia-orn" src="/imagenes/verde/linea-corazon.png" alt="" />
+    </section>
+
+    <!-- ═══ BODA CIVIL (domingo) ═══ -->
+    <section class="lamina" style="aspect-ratio:1000/1504; background-image:url('/imagenes/verde/civil.webp')">
+        <p class="txt script" style="top:18.3%; font-size:13cqw">Boda</p>
+        <p class="txt serif" style="top:24.2%; font-size:5.6cqw; letter-spacing:.03em; color:#9b1c31">CIVIL</p>
+        <img class="orn" src="/imagenes/verde/anillos.webp" alt="" style="top:36.5%; width:26cqw" />
+        <div class="info" style="top:47.9%">
+            <p class="info-dia">DOMINGO 6 DE DICIEMBRE</p>
+            <p class="info-hora">16:00 HRS.</p>
+            <p class="info-lugar">LUGAR: SALÓN NAVIA</p>
+            <p class="info-dir">{e.direccionSalon}</p>
+            <a class="llegar" href={e.mapaSalon} target="_blank" rel="noopener" aria-label="Cómo llegar al Salón Navia"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z" fill="currentColor"/></svg>¿CÓMO LLEGAR?</a>
+        </div>
+    </section>
+
+    {/* ═══ ITINERARIO ═══
+        DESACTIVADO por ahora: los novios van a pasar el itinerario completo.
+        Para volver a mostrarlo, cambiar "false" por "true" en la línea de
+        abajo y cargar los horarios nuevos. */}
+    {false && (
+    <section class="lamina" style="aspect-ratio:1000/1920; background-image:url('/imagenes/verde/itinerario.webp')">
+        <span class="eje" aria-hidden="true"></span>
+
+        <span class="punto" style="top:33%"></span>
+        <div class="hito izq" style="top:33%"><b>14:30 Hrs.</b>BODA<br />RELIGIOSA<small>SÁBADO 5</small></div>
+        <img class="hito-ic der" src="/imagenes/verde/ic-iglesia.png" alt="" style="top:33%; width:15cqw" />
+
+        <span class="punto" style="top:54%"></span>
+        <img class="hito-ic izq" src="/imagenes/verde/ic-brindis.png" alt="" style="top:54%; width:10cqw" />
+        <div class="hito der" style="top:54%"><b>18:00 Hrs.</b>RECEPCIÓN<br />SOCIAL<small>SÁBADO 5</small></div>
+
+        <span class="punto" style="top:75%"></span>
+        <div class="hito izq" style="top:75%"><b>16:00 Hrs.</b>BODA<br />CIVIL<small>DOMINGO 6</small></div>
+        <img class="hito-ic der" src="/imagenes/verde/anillos.webp" alt="" style="top:75%; width:17cqw" />
+    </section>
+    )}
+
+    <!-- Foto de los novios a todo el ancho, fundida con el papel arriba y abajo -->
+    <section class="foto">
+        <img src="/imagenes/verde/foto-2.webp" alt="Edwin y Arminda" loading="lazy" width="860" height="1147" />
+    </section>
+
+    <!-- ═══ GRACIAS ═══ -->
+    <!-- Mismo fondo y adornos que la sección de padres -->
+    <section class="lamina" style="aspect-ratio:1000/1180; background-image:url('/imagenes/verde/padres.webp'); background-size:100% auto; background-position:center bottom">
+        <p class="txt serif caja" style="top:12%; font-size:4.4cqw; width:66%; line-height:1.15">GRACIAS POR ACOMPAÑARNOS EN ESTE MOMENTO TAN IMPORTANTE...</p>
+        <img class="orn" src="/imagenes/verde/laurel.png" alt="" style="top:23.5%; width:25cqw" />
+        <p class="txt script" style="top:34%; font-size:12cqw">¡Los esperamos!</p>
+        <img class="orn" src="/imagenes/verde/linea-corazon.png" alt="" style="top:42%; width:44cqw" />
+        <div class="mono" style="top:59%; font-size:24cqw">
+            <span>{e.iniciales[0]}</span><span class="mono-2">{e.iniciales[1]}</span>
+        </div>
+        <p class="txt script" style="top:77%; font-size:8.5cqw">{e.nombre1} &amp; {e.nombre2}</p>
+    </section>
+</div>
+
+<style>
+    .inv {
+        container-type: inline-size;
+        width: 100%;
+        color: #2a2324;
+        background: #f9f9f7;
+        /* Números rectos, como en el diseño (Cormorant los trae "antiguos") */
+        font-variant-numeric: lining-nums;
+    }
+    .lamina {
+        position: relative;
+        width: 100%;
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+        overflow: hidden;
+    }
+    .txt {
+        position: absolute;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        margin: 0;
+        white-space: nowrap;
+        text-align: center;
+        line-height: 1;
+    }
+    .caja {
+        white-space: normal;
+    }
+    /* Adornos sueltos (laurel, línea con corazón) */
+    .orn {
+        position: absolute;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        height: auto;
+        display: block;
+    }
+    .script {
+        font-family: "Allura", cursive;
+        font-weight: 400;
+        color: #9b1c31;
+    }
+    .serif {
+        font-family: "Cormorant Garamond", serif;
+        font-weight: 500;
+    }
+    .sans {
+        font-family: "Montserrat", sans-serif;
+        font-weight: 500;
+        letter-spacing: 0.02em;
+    }
+
+    /* Monograma: dos iniciales cruzadas */
+    .mono {
+        position: absolute;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-family: "Allura", cursive;
+        line-height: 1;
+        white-space: nowrap;
+        color: #9b1c31;
+    }
+    .mono-2 {
+        display: inline-block;
+        margin-left: -0.3em;
+        transform: translateY(0.22em);
+    }
+
+    /* Tres flechas hacia abajo, encendiéndose en cascada: "deslizá" */
+    .flechas {
+        position: absolute;
+        left: 50%;
+        bottom: 2%;
+        transform: translateX(-50%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .flechas i {
+        display: block;
+        width: 4cqw;
+        height: 4cqw;
+        margin-top: -1.6cqw;
+        border-right: 2px solid currentColor;
+        border-bottom: 2px solid currentColor;
+        transform: rotate(45deg);
+        opacity: 0.15;
+        animation: cascada 1.6s ease-in-out infinite;
+    }
+    .flechas i:nth-child(2) {
+        animation-delay: 0.2s;
+    }
+    .flechas i:nth-child(3) {
+        animation-delay: 0.4s;
+    }
+    @keyframes cascada {
+        40% {
+            opacity: 1;
+        }
+        80% {
+            opacity: 0.15;
+        }
+    }
+
+    /* Banda verde con el versículo */
+    .verde {
+        background: #7d1426;
+        color: #fff;
+        text-align: center;
+        padding: 11cqw 6cqw 11cqw;
+    }
+    .verso {
+        font-family: "Cormorant Garamond", serif;
+        font-weight: 500;
+        font-size: 4.6cqw;
+        line-height: 1.35;
+        margin: 0;
+    }
+    .cita {
+        margin-top: 6cqw;
+        font-size: 3.9cqw;
+        line-height: 1;
+    }
+    .play-txt {
+        font-family: "Cormorant Garamond", serif;
+        font-weight: 500;
+        font-size: 3.9cqw;
+        white-space: nowrap;
+        margin: 14cqw 0 9cqw;
+    }
+    .reproductor {
+        display: block;
+        width: 82%;
+        height: 13cqw;
+        margin: 0 auto;
+    }
+
+    /* Calendario */
+    .dia {
+        font-size: 4.6cqw;
+    }
+    .corazon {
+        position: absolute;
+        width: 11cqw;
+        transform: translate(-50%, -50%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .corazon svg {
+        width: 100%;
+        display: block;
+    }
+    .corazon b {
+        position: absolute;
+        top: 42%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: #fff;
+        font-family: "Cormorant Garamond", serif;
+        font-weight: 600;
+        font-size: 5cqw;
+    }
+
+    .contador {
+        position: absolute;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        display: flex;
+        gap: 6cqw;
+        color: #fff;
+        text-align: center;
+    }
+    .contador b {
+        display: block;
+        font-family: "Cormorant Garamond", serif;
+        font-weight: 500;
+        font-size: 10cqw;
+        line-height: 1;
+    }
+    .contador small {
+        display: block;
+        font-family: "Cormorant Garamond", serif;
+        font-size: 3.4cqw;
+        letter-spacing: 0.08em;
+        margin-top: 1.2cqw;
+    }
+
+    /* "¿Cómo llegar?" ya está escrito en la imagen: esto lo vuelve botón */
+    /* Botón "¿Cómo llegar?": tapa el texto que trae la imagen */
+    .llegar {
+        display: inline-flex;
+        margin-top: 7cqw;
+        align-items: center;
+        justify-content: center;
+        gap: 1.6cqw;
+        padding: 2.4cqw 6cqw;
+        border-radius: 999px;
+        background: #9b1c31;
+        color: #fff;
+        font-family: "Cormorant Garamond", serif;
+        font-weight: 600;
+        font-size: 4.2cqw;
+        letter-spacing: 0.04em;
+        line-height: 1;
+        white-space: nowrap;
+        text-decoration: none;
+        box-shadow: 0 1cqw 3cqw rgba(125, 20, 38, 0.3);
+        animation: latido 2.4s ease-in-out infinite;
+    }
+    .llegar svg {
+        width: 4.4cqw;
+        height: 4.4cqw;
+    }
+    @keyframes latido {
+        50% {
+            transform: scale(1.05);
+        }
+    }
+
+    /* Bloque de datos de cada tarjeta: arranca en "top" y baja solo */
+    /* Título "Primer día" / "Segundo día" sobre papel */
+    .dia-titulo {
+        background: url("/imagenes/verde/papel.webp") center top / 100% auto repeat-y;
+        text-align: center;
+        padding: 10cqw 6cqw 2cqw;
+    }
+    .dia-titulo p {
+        margin: 0;
+    }
+    .dia-num {
+        font-size: 13cqw;
+        line-height: 1.1;
+    }
+    .dia-fecha {
+        font-size: 5.6cqw;
+        letter-spacing: 0.04em;
+        margin-top: 1cqw !important;
+    }
+    .dia-orn {
+        display: block;
+        width: 44cqw;
+        height: auto;
+        margin: 2.4cqw auto 0;
+    }
+
+    .info {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 64%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    .info p {
+        margin: 0;
+    }
+    .info-dia {
+        font-family: "Montserrat", sans-serif;
+        font-weight: 500;
+        font-size: 3.6cqw;
+        letter-spacing: 0.02em;
+        line-height: 1.2;
+    }
+    .info-hora {
+        font-family: "Cormorant Garamond", serif;
+        font-weight: 500;
+        font-size: 5.8cqw;
+        line-height: 1.1;
+        margin-top: 2.4cqw !important;
+    }
+    .info-lugar {
+        font-family: "Cormorant Garamond", serif;
+        font-weight: 500;
+        font-size: 5.4cqw;
+        line-height: 1.15;
+        color: #9b1c31;
+        margin-top: 3cqw !important;
+    }
+    .info-dir {
+        font-family: "Montserrat", sans-serif;
+        font-weight: 500;
+        font-size: 3cqw;
+        line-height: 1.6;
+        letter-spacing: 0.03em;
+        margin-top: 3cqw !important;
+    }
+
+    /* Itinerario */
+    .eje {
+        position: absolute;
+        left: 50%;
+        top: 25%;
+        bottom: 9%;
+        width: 1.5px;
+        background: #b8964f;
+        transform: translateX(-50%);
+    }
+    .eje::before,
+    .eje::after {
+        content: "";
+        position: absolute;
+        left: 50%;
+        width: 1.8cqw;
+        height: 1.8cqw;
+        border-radius: 50%;
+        background: #b8964f;
+        transform: translateX(-50%);
+    }
+    .eje::before {
+        top: 0;
+    }
+    .eje::after {
+        bottom: 0;
+    }
+    .punto {
+        position: absolute;
+        left: 50%;
+        width: 2cqw;
+        height: 2cqw;
+        border-radius: 50%;
+        background: #b8964f;
+        transform: translate(-50%, -50%);
+    }
+    .hito {
+        position: absolute;
+        transform: translateY(-50%);
+        font-family: "Cormorant Garamond", serif;
+        font-weight: 500;
+        font-size: 4cqw;
+        line-height: 1.05;
+    }
+    .hito b {
+        display: block;
+        font-weight: 500;
+        font-size: 4.6cqw;
+        margin-bottom: 0.8cqw;
+    }
+    .hito small {
+        display: block;
+        font-size: 3.2cqw;
+        letter-spacing: 0.06em;
+        margin-top: 1.4cqw;
+        opacity: 0.85;
+    }
+    .hito.izq {
+        right: 54%;
+        text-align: right;
+    }
+    .hito.der {
+        left: 54%;
+        text-align: left;
+    }
+    .hito-ic {
+        position: absolute;
+        transform: translate(-50%, -50%);
+    }
+    .hito-ic.izq {
+        left: 33%;
+    }
+    .hito-ic.der {
+        left: 67%;
+    }
+
+    /* Fotos de los novios */
+    .foto {
+        background: url("/imagenes/verde/papel.webp") center top / 100% auto repeat-y;
+    }
+    .foto img {
+        display: block;
+        width: 100%;
+        height: auto;
+    }
+
+    /* ── Animaciones de entrada ──
+       El script marca cada elemento con .anim y una dirección. Se usan las
+       propiedades sueltas translate/scale (no transform) para no pisar el
+       centrado que ya tienen los textos. */
+    :global(.anim) {
+        opacity: 0;
+        filter: blur(3px);
+        transition:
+            opacity 1.3s cubic-bezier(0.22, 0.61, 0.36, 1),
+            translate 1.3s cubic-bezier(0.22, 0.61, 0.36, 1),
+            scale 1.3s cubic-bezier(0.22, 0.61, 0.36, 1),
+            filter 1.3s ease;
+        will-change: opacity, translate;
+    }
+    :global(.anim.desde-izq) {
+        translate: -7cqw 0;
+    }
+    :global(.anim.desde-der) {
+        translate: 7cqw 0;
+    }
+    :global(.anim.desde-abajo) {
+        translate: 0 5cqw;
+    }
+    :global(.anim.crece) {
+        scale: 0.86;
+    }
+    :global(.anim.foto-zoom) {
+        scale: 1.06;
+        filter: blur(6px);
+    }
+    :global(.anim.ver) {
+        opacity: 1;
+        translate: 0 0;
+        scale: 1;
+        filter: none;
+    }
+    .foto {
+        overflow: hidden;
+    }
+    @media (prefers-reduced-motion: reduce) {
+        :global(.anim) {
+            opacity: 1 !important;
+            translate: none !important;
+            scale: none !important;
+            filter: none !important;
+            transition: none !important;
+        }
+    }
+    .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        white-space: nowrap;
+    }
+</style>
+
+<script>
+    // Contador hasta la boda religiosa
+    const cont = document.getElementById("contador");
+    if (cont) {
+        const meta = new Date(cont.dataset.inicio!).getTime();
+        const campos = Object.fromEntries(
+            [...cont.querySelectorAll<HTMLElement>("[data-u]")].map((b) => [b.dataset.u, b]),
+        );
+        const tic = () => {
+            const r = Math.max(0, meta - Date.now());
+            const s = Math.floor(r / 1000);
+            campos.d.textContent = String(Math.floor(s / 86400));
+            campos.h.textContent = String(Math.floor((s % 86400) / 3600)).padStart(2, "0");
+            campos.m.textContent = String(Math.floor((s % 3600) / 60)).padStart(2, "0");
+            campos.s.textContent = String(s % 60).padStart(2, "0");
+        };
+        tic();
+        setInterval(tic, 1000);
+    }
+
+    // Animaciones de entrada: cada elemento aparece al llegar a la pantalla.
+    // Los textos alternan izquierda / derecha; títulos en cursiva suben;
+    // adornos, íconos y monogramas crecen; las fotos se asientan con un zoom.
+    const items: HTMLElement[] = [];
+    document.querySelectorAll<HTMLElement>(".inv > section").forEach((sec) => {
+        const hijos = sec.querySelectorAll<HTMLElement>(":scope > *:not(.info):not(.eje):not(.punto), :scope > .info > *");
+        let lado = 0;
+        hijos.forEach((el) => {
+            el.classList.add("anim");
+            if (el.tagName === "IMG" && sec.classList.contains("foto")) {
+                el.classList.add("foto-zoom");
+            } else if (el.matches(".orn, .mono, .corazon, .dia, img, .hito-ic, audio, .llegar, .contador, .flechas")) {
+                el.classList.add("crece");
+            } else if (el.matches(".script, .dia-num")) {
+                el.classList.add("desde-abajo");
+            } else {
+                el.classList.add(lado++ % 2 === 0 ? "desde-izq" : "desde-der");
+            }
+            items.push(el);
+        });
+    });
+
+    const obs = new IntersectionObserver(
+        (entradas) => {
+            // Los que entran juntos se escalonan de arriba hacia abajo
+            const visibles = entradas
+                .filter((en) => en.isIntersecting)
+                .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+            visibles.forEach((en, i) => {
+                const el = en.target as HTMLElement;
+                const paso = el.matches(".dia, .corazon") ? 0.03 : 0.14;
+                el.style.transitionDelay = Math.min(i * paso, 1.2) + "s";
+                el.classList.add("ver");
+            });
+            // Solo se anima al BAJAR: si el elemento sale por abajo (porque se
+            // está subiendo) se esconde sin demora, para que vuelva a entrar
+            // animado la próxima vez que se baje. Si sale por arriba (se está
+            // bajando) queda visible, así al subir no hay animación.
+            entradas
+                .filter((en) => !en.isIntersecting && en.boundingClientRect.top > 0)
+                .forEach((en) => {
+                    const el = en.target as HTMLElement;
+                    el.style.transitionDelay = "0s";
+                    el.classList.remove("ver");
+                });
+        },
+        { threshold: 0.1, rootMargin: "0px 0px -6% 0px" },
+    );
+    items.forEach((el) => obs.observe(el));
+</script>

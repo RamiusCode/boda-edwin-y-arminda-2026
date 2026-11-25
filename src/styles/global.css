@@ -1,0 +1,23 @@
+@import "tailwindcss";
+
+/* Las letras de los nombres y títulos se sirven desde /fonts/ (juego latino,
+   con tildes y ñ): no esperan dos viajes a Google. Cormorant Garamond llega
+   en un solo pedido a Google desde el layout. */
+
+/* Allura: nombres, monograma y títulos en cursiva */
+@font-face {
+  font-family: 'Allura';
+  src: url('/fonts/Allura-latin.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Montserrat Medium: día, direcciones */
+@font-face {
+  font-family: 'Montserrat';
+  src: url('/fonts/Montserrat-Medium.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
