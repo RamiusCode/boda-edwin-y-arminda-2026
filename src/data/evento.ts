@@ -26,6 +26,7 @@ export const evento = {
         { titulo: "MADRINA DE FOTO Y VIDEO", nombre: "Natay Claros Ramos" },
         { titulo: "PADRINOS DE DECORACIÓN", nombre: "Anil Nair y Sra." },
         { titulo: "MADRINA DE SORPRESA", nombre: "Bernita Orellana" },
+        { titulo: "PADRINOS DE CONTEO", nombre: "Encarnación Almanza y Sra." },
     ],
 
     direccionSalon: "CALLE JUNÍN, A UNA CUADRA Y MEDIA DE LA PLAZA 24 DE SEPTIEMBRE ESQ. AV. CIRCUNVALACIÓN · MAIRANA",
